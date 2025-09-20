@@ -15,7 +15,6 @@ def get_token():
     return {"access_token": token, "token_type": "bearer"}
 
 app.include_router(vendor_router, prefix="/vendor", tags=["Vendor"],dependencies=[Depends(get_current_user)])
-# app.include_router(dashboard_router, prefix="/dashboard", tags=["Dashboard"])
 
 @app.get("/")
 def root():

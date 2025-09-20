@@ -22,3 +22,6 @@ def delete_user(db: Session, user_id: int):
         db.commit()
         return True
     return False
+
+def get_silo_by_vendor(db:Session):
+    return {"message":True}

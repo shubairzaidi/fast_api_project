@@ -10,7 +10,7 @@ router = APIRouter()
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db, user)
 
-@router.get("/", response_model=list[schemas.UserResponse])
+@router.get("/get_vendor_list", response_model=list[schemas.UserResponse])
 def get_users(db: Session = Depends(get_db)):
     return crud.get_users(db)
 
@@ -27,3 +27,7 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     if not deleted:
         raise HTTPException(status_code=404, detail="User not found")
     return {"message": "User deleted successfully"}
+
+@router.post("/")
+def vendor_silo(db:Session=Depends(get_db)):
+    return crud.get_silo_by_vendor(db)
