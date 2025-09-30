@@ -194,3 +194,40 @@ def downloadCustomerExcel(db:Session):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    
+# add customers using forms
+def addCustomer(db: Session, request: dict,user):
+    try:
+        # Check if customer already exists by name or email
+        existing = db.query(Customer).filter(
+            (Customer.name == request.get("name"))).first()
+
+        if existing:
+            return custom_http_response(
+                status_code=200,
+                success=False,
+                message="Customer already exists"
+            )
+
+        # Create new customer object
+        customer = Customer(
+            name=request.get("name"),
+            email=request.get("email"),
+            address=request.get("address"),
+            profile_photo=request.get("profile_photo"),
+            created_by=user.id,
+        )
+
+        db.add(customer)
+        db.commit()
+        db.refresh(customer)
+
+        return custom_http_response(
+            status_code=200,
+            success=True,
+            message="Customer added successfully"
+        )
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")

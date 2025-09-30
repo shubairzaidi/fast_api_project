@@ -19,6 +19,7 @@ class Customer(Base):
     name = Column(String(100), nullable=False)
     address = Column(String(200), nullable=True)
     email = Column(String(100), nullable=True)
+    profile_photo = Column(String(255),nullable=True)
     created_by = Column(Integer, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=True)
     updated_by = Column(Integer, nullable=True)
