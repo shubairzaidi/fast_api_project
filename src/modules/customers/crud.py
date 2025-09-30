@@ -2,7 +2,7 @@ from fastapi import HTTPException # type: ignore
 from sqlalchemy.orm import Session # type: ignore
 from sqlalchemy import desc # type: ignore
 from src.database.models import Customer
-from src.modules.customers.schemas import CustomerDetails
+from src.modules.customers.schemas import CustomerDetails,GetCustomer
 from src.utils.helper import custom_http_response
 
 
@@ -35,8 +35,9 @@ def createCustomers(schema_dict:CustomerDetails ,db:Session,user):
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 
-def getCustomers(db:Session):
+def getCustomers(db:Session,payload:GetCustomer):
     try:
+        # --------- Pagination part --------------
         customers = db.query(
             Customer.id.label('customer_id'),
             Customer.name,

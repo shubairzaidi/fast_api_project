@@ -1,14 +1,11 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Body
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, Body # type: ignore
+from sqlalchemy.orm import Session # type: ignore
 from src.database.session import get_db
 from src.modules.customers import schemas,crud
 from src.dependencies.dependencies import get_current_user
-# from src.dependencies.jwt_bearer import JWTBearer
 from src.database import models
 
-
-# user_dependency = Annotated[dict, Depends(JWTBearer())]
 router = APIRouter()
 
 ""
@@ -28,5 +25,5 @@ def create_customers(schema_dict:schemas.CustomerDetails,db:Session = Depends(ge
 "Purpose: To get Customers"
 ""
 @router.post("/get-customer")
-def create_customers(db:Session = Depends(get_db),current_user: models.User = Depends(get_current_user)):
-    return crud.getCustomers(db)
+def create_customers(payload:schemas.GetCustomer,db:Session = Depends(get_db),current_user: models.User = Depends(get_current_user)):
+    return crud.getCustomers(db,payload)
