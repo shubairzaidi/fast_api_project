@@ -5,7 +5,7 @@ from src.database.session import get_db
 from src.modules.customers import schemas,crud
 from src.dependencies.dependencies import get_current_user
 from src.database import models
-import pandas as pd
+import pandas as pd # type: ignore
 from io import BytesIO
 
 router = APIRouter()
