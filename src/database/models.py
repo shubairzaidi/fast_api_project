@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, func
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, DateTime, func # type: ignore
+from sqlalchemy.ext.declarative import declarative_base # type: ignore
 
 
 Base = declarative_base() 
