@@ -7,3 +7,6 @@ python-dotenv
 pydantic
 passlib[bcrypt]
 python-jose
+pandas
+openpyxl
+requests
