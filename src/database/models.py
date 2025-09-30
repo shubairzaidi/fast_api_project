@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, func # type: ignore
+from sqlalchemy import Column, Integer, String, DateTime, func,Boolean # type: ignore
 from sqlalchemy.ext.declarative import declarative_base # type: ignore
 
 
@@ -20,6 +20,21 @@ class Customer(Base):
     address = Column(String(200), nullable=True)
     email = Column(String(100), nullable=True)
     profile_photo = Column(String(255),nullable=True)
+    created_by = Column(Integer, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=True)
+    updated_by = Column(Integer, nullable=True)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
+
+
+class Meter(Base):
+    __tablename__ = "meters"
+
+    id = Column(Integer, primary_key=True, index=True)
+    meter_serial = Column(String(50),nullable= True)
+    customer_id = Column(Integer,nullable = True)
+    location = Column(String(150),nullable= True)
+    installation_year = Column(Integer,nullable= True)
+    is_active = Column(Boolean,nullable= True)
     created_by = Column(Integer, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=True)
     updated_by = Column(Integer, nullable=True)

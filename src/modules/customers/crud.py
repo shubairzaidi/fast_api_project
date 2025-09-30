@@ -198,7 +198,6 @@ def downloadCustomerExcel(db:Session):
 # add customers using forms
 def addCustomer(db: Session, request: dict,user):
     try:
-        # Check if customer already exists by name or email
         existing = db.query(Customer).filter(
             (Customer.name == request.get("name"))).first()
 
