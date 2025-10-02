@@ -50,7 +50,7 @@ def getCustomers(db:Session,req:GetCustomer):
             db.query(func.count(Customer.id))
             .scalar()
         )
-        total_pages = (total_count + size - 1)//size
+        total_pages = (total_count + size - 1) // size
         offset = (page - 1)*size
         customers = db.query(
             Customer.id.label('customer_id'),
