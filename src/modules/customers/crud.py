@@ -227,6 +227,37 @@ def addCustomer(db: Session, request: dict,user):
             message="Customer added successfully"
         )
 
-    except Exception as e:
+    except Exception as e:  
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    
+
+# save customers using pydantic model ..
+def saveCustomer(db: Session, request,user):
+    try:
+        customer = db.query(Customer).filter(Customer.name == request["name"]).first()
+        if customer:
+            return custom_http_response(
+                status_code=200,
+                success=True,
+                message="Customer already exists"
+            )
+        print("sssssssssssss",request)
+        customer = Customer(
+            name = request["name"],
+            email = request["email"],
+            address = request["address"],
+            profile_photo = request["profile_photo"],
+            created_by=user.id,
+        )
+        db.add(customer)
+        db.commit()
+        return custom_http_response(
+            status_code=200,
+            success=True,
+            message="Customer added successfully"
+        )
+
+    except Exception as e:  
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")

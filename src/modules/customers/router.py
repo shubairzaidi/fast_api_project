@@ -1,6 +1,6 @@
 import shutil
 from typing import Annotated, Optional
-from fastapi import APIRouter, Depends,File,Form,UploadFile # type: ignore
+from fastapi import APIRouter, Depends,File,Form, HTTPException,UploadFile # type: ignore
 from sqlalchemy.orm import Session # type: ignore
 from src.database.session import get_db
 from src.modules.customers import schemas,crud
@@ -115,3 +115,46 @@ def add_customer_using_form(
         "profile_photo": str(file_path) 
     }
     return crud.addCustomer(db,request,current_user)
+
+
+
+""
+"Author:Shubair Zaidi"
+"Date:2 October 2025",
+"Purpose: To add Customer"
+""
+@router.post("/save-customer")
+def save_customer(
+    customer_data : str = Form(...),
+    profile_photo : UploadFile = File(...),
+    db:Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)):
+    try:
+        parsed_data = schemas.AddCustomer.validate_to_json(customer_data)
+        print("nfkjfkrefkre",parsed_data)
+        if not parsed_data.name or not parsed_data.email:
+            return custom_http_response(
+            status_code=200,
+            success=False,
+            message="Invalid name or email"
+        )
+        if not profile_photo:
+            return custom_http_response(
+            status_code=200,
+            success=False,
+            message="Profile photo is required"
+        )
+        request = parsed_data.dict()
+        print("request hai ye",request)
+
+        file_path = UPLOAD_DIR / profile_photo.filename
+        with file_path.open("wb") as buffer:
+            shutil.copyfileobj(profile_photo.file, buffer)
+
+        request["profile_photo"] = str(file_path)
+        return crud.saveCustomer(db,request,current_user)
+   
+    except Exception as e:  
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+
