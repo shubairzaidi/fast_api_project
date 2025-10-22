@@ -41,3 +41,19 @@ class Meter(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 
 
+class ContractorMaster(Base):
+    __tablename__ = "tbl_contractor_master"
+
+    id = Column(Integer, primary_key=True, index=True)
+    contractor_name = Column(String(255),nullable= False)
+    license_number = Column(String(100),nullable = True)
+    contact_email = Column(String(255),nullable= True)
+    contact_phone = Column(String(20),nullable= True)
+    address = Column(String(50),nullable= True)
+    created_by = Column(Integer, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=True)
+    updated_by = Column(Integer, nullable=True)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
+
+
+
