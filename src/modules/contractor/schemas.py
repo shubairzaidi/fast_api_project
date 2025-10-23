@@ -9,4 +9,7 @@ class CreateContractor(BaseModel):
     contact_email:Optional[EmailStr]
     address:Optional[str]
 
-    
+
+class ContractorDetails(BaseModel):
+    page:Optional[int] = 1
+    size:Optional[int] = 10

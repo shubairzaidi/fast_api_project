@@ -15,3 +15,22 @@ router = APIRouter()
 @router.post("/create-contractor")
 def create_customers(schema_dict:schemas.CreateContractor,db:Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     return crud.createContarctors(schema_dict,db,current_user)
+
+
+""
+"Author:Shubair Zaidi"
+"Date:23 October 2025",
+"Purpose: To update contractors"
+""
+@router.post("/update-contractor/{contractor_id}")
+def update_contractor(schema_dict:schemas.CreateContractor,contractor_id:int,db:Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    return crud.updateContractor(schema_dict,contractor_id,db)
+
+""
+"Author:Shubair Zaidi"
+"Date:23 October 2025",
+"Purpose: To update contractors"
+""
+@router.post("/contractor-details")
+def contractor_details(schema:schemas.ContractorDetails,db:Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    return crud.getContractorDetails(schema,db)
