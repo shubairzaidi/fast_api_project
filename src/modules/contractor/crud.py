@@ -231,17 +231,33 @@ def tripDetails(db):
 
 # Output should include:
 # Contractor name
-
 # Total trips completed
-
-# Total quantity (SUM of quantity_tons)
-
+# Total
 # Total amount (SUM of total_amount)
-
 # Active vehicle count (DISTINCT vehicle_id)
-
 # Latest trip date for that contractor (MAX(trip_date))
-
 # Average trip quantity (AVG(quantity_tons))
-
 # Month-over-month revenue change (requires subquery)
+
+def profileSummary(db):
+    try:
+        profile_summary = (
+            db.query(
+                ContractorMaster.contractor_name,
+                
+            )
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+
+#   {
+#     "contractor_name": "Green Earth Transport",
+#     "total_trips": 32,
+#     "total_quantity": 645.50,
+#     "total_amount": 812300.00,
+#     "active_vehicles": 5,
+#     "latest_trip_date": "2025-10-22",
+#     "avg_trip_quantity": 20.17,
+#     "month_over_month_change": 12.45
+#   },

@@ -52,3 +52,12 @@ def contractor_details(contractor_id,db:Session = Depends(get_db), current_user:
 @router.post("/trip-details")
 def trip_details(db:Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     return crud.tripDetails(db)
+
+""
+"Author:Shubair Zaidi"
+"Date:23 October 2025",
+"Purpose: To update contractors"
+""
+@router.post("/profile-summary")
+def profile_summary(db:Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    return crud.profileSummary(db)
