@@ -6,6 +6,7 @@ from src.modules.meters.router import router as meter
 from src.database.session import Base, engine
 from src.dependencies.auth import create_access_token
 from src.dependencies.dependencies import get_current_user
+from src.modules.contractor.router import router as contractor
 
 Base.metadata.create_all(bind=engine)
 
@@ -18,5 +19,6 @@ def get_token():
 app.include_router(vendor_router, prefix="/vendor", tags=["Vendor"],dependencies=[Depends(get_current_user)])
 app.include_router(customers, prefix="/customers", tags=["Customer"],dependencies=[Depends(get_current_user)])
 app.include_router(meter, prefix="/meter", tags=["Meter"],dependencies=[Depends(get_current_user)])
+app.include_router(contractor,prefix="/contractor",tags=["Contractor"],dependencies=[Depends(get_current_user)])
 
 
