@@ -145,3 +145,29 @@ def getContractorDetails(req,db):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+
+def getContractorDetails(contractor_id,db):
+    try:
+        if not contractor_id:
+            return custom_http_response(
+                status_code=200,
+                success=True,
+                message="Invalid contractot Id"
+            )
+        contractor  = db.query(ContractorMaster).filter(ContractorMaster.id == contractor_id)
+        if not contractor.first():
+            return custom_http_response(
+                status_code=200,
+                success=True,
+                message="Contractor not present"
+            )
+        contractor.delete()
+        db.commit()
+        return custom_http_response(
+            status_code=200,
+            success=True,
+            message="Conractor deleted successfully"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")

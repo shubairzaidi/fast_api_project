@@ -34,3 +34,13 @@ def update_contractor(schema_dict:schemas.CreateContractor,contractor_id:int,db:
 @router.post("/contractor-details")
 def contractor_details(schema:schemas.ContractorDetails,db:Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     return crud.getContractorDetails(schema,db)
+
+
+""
+"Author:Shubair Zaidi"
+"Date:23 October 2025",
+"Purpose: To update contractors"
+""
+@router.post("/delete-contractor/{contractor_id}")
+def contractor_details(contractor_id,db:Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    return crud.getContractorDetails(contractor_id,db)
