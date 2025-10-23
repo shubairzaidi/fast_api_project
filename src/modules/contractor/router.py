@@ -4,7 +4,6 @@ from src.database import models
 from src.database.session import get_db
 from src.dependencies.dependencies import get_current_user
 from src.modules.contractor import crud,schemas
-from src.database.models import ContractorMaster
 
 router = APIRouter()
 ""
@@ -44,3 +43,12 @@ def contractor_details(schema:schemas.ContractorDetails,db:Session = Depends(get
 @router.post("/delete-contractor/{contractor_id}")
 def contractor_details(contractor_id,db:Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     return crud.getContractorDetails(contractor_id,db)
+
+""
+"Author:Shubair Zaidi"
+"Date:23 October 2025",
+"Purpose: To update contractors"
+""
+@router.post("/trip-details")
+def trip_details(db:Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    return crud.tripDetails(db)

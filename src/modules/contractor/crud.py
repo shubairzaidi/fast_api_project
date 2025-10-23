@@ -3,7 +3,7 @@ from src.utils.helper import custom_http_response
 from src.database.session import get_db
 from src.dependencies.dependencies import get_current_user
 from src.modules.contractor import crud,schemas
-from src.database.models import ContractorMaster
+from src.database.models import AshContractor, ContractorMaster, ContractorVehicle, TripDetails, VehicleMaster
 from sqlalchemy import func
 
 
@@ -111,7 +111,7 @@ def getContractorDetails(req,db):
             .scalar()
         )
         total_pages = (total_count + size -1) // size
-        offset = (page - 1)*size
+        offset = (page - 1) * size
 
         contractor = db.query(
             ContractorMaster.id.label("contractor_id"),
@@ -171,3 +171,77 @@ def getContractorDetails(contractor_id,db):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+
+def tripDetails(db):
+    try:
+        trip_details = db.query(
+            TripDetails.id.label("trip_id"),
+            TripDetails.trip_date,
+            TripDetails.material_type,
+            TripDetails.quantity_tons,
+            TripDetails.rate_per_ton,
+            TripDetails.total_amount,
+            TripDetails.status,
+            AshContractor.contract_number,
+            ContractorMaster.contractor_name,
+            ContractorVehicle.vehicle_number,
+            ContractorVehicle.vehicle_type
+        ).outerjoin(
+           AshContractor, TripDetails.contract_id == AshContractor.id
+        ).outerjoin(
+           VehicleMaster, TripDetails.vehicle_id == VehicleMaster.id
+        ).outerjoin(
+           ContractorMaster, VehicleMaster.contractor_id == ContractorMaster.id
+        ).outerjoin(
+           ContractorVehicle, ContractorMaster.id == ContractorVehicle.contractor_id
+        ).all()
+        
+        if not trip_details:
+            return custom_http_response(
+                status_code=200,
+                success=True,
+                message="Details not found"
+            )
+        trip_data = []
+        for t in trip_details:
+            trip_data.append({
+                "trip_id":t.trip_id,
+                "trip_date":t.trip_date.strftime("%d-%m-%y"),
+                "material_type":t.material_type,
+                "quantity_tons": float(t.quantity_tons),
+                "rate_per_ton": float(t.rate_per_ton),
+                "total_amount": float(t.total_amount),
+                "status":t.status,
+                "contract_number":t.contract_number,
+                "contractor_name":t.contractor_name,
+                "vehicle_number":t.vehicle_number,
+                "vehicle_type":t.vehicle_number
+            })
+        return custom_http_response(
+            status_code=200,
+            success=True,
+            message="Trip details fetch successfully",
+            data=trip_data
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+
+
+# Output should include:
+# Contractor name
+
+# Total trips completed
+
+# Total quantity (SUM of quantity_tons)
+
+# Total amount (SUM of total_amount)
+
+# Active vehicle count (DISTINCT vehicle_id)
+
+# Latest trip date for that contractor (MAX(trip_date))
+
+# Average trip quantity (AVG(quantity_tons))
+
+# Month-over-month revenue change (requires subquery)
